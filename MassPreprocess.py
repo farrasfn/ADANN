@@ -35,16 +35,11 @@ def preprocess(imgpath):
     ret,newg = cv2.threshold(csimg,40,255,cv2.THRESH_TOZERO)
     return (newg)
 
-os.chdir('./AD') #go to AD Directory
-print(os.getcwd())
-
-for f in os.listdir():
-    ph = convert(readDCM('*.dcm'), 0, 255, np.uint8)
-    pngize(ph,("dementia" + f + '.png'))
-    prep = preprocess("dementia" + f + ".png")
-    pngize(prep, ("AD prep" + f + '.png'))
-
-    
-  
+for filename in glob.glob('AD/*.dcm'):
+    ph = convert(readDCM(filename), 0, 255, np.uint8)
+    pngize(ph, "filename"[:-4])
+    prep = preprocess(filename[:-3]+'.png')
+    pngize(prep, ("AD PREP"+filename))
+ 
 #    new_name = '{} {}'.format(f_name, f_ext)
 #    os.rename(f, new_name)
