@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 from skimage import exposure
 
 def readDCM(path):
-    ds=dicom.dcmread('sample2.dcm')
+    ds=dicom.dcmread(path)
     dcm_sample=ds.pixel_array
     return dcm_sample
 
@@ -25,8 +25,8 @@ def pngize(arraydata, name):
     data = im.fromarray(arraydata)
     data.save(name + '.png')
 
-def preprocess(csimg):
-    #csimg = cv2.imread(img,0) #read image as grayscale
+def preprocess(imgpath):
+    csimg = cv2.imread(imgpath,0) #read image as grayscale
     r = 1200.0/csimg.shape[1]
     dim=(1200,int(csimg.shape[0]*r))
     rz = cv2.resize(csimg,dim,interpolation=cv2.INTER_AREA)
@@ -35,10 +35,12 @@ def preprocess(csimg):
     return (newg)
 
 sample2 = convert(readDCM('sample2.dcm'), 0, 255, np.uint8)
-preprocessed = preprocess(im.fromarray(sample2))
-
-cv2.imshow('sample image', preprocessed)
-cv2.waitKey()
+pngize(sample2,'sample2')
+prep = preprocess('sample2.png')
+plt.imshow(prep)
+plt.show()
+#cv2.imshow('sample image', preprocessed)
+#cv2.waitKey()
 
 
 #path='sample2.png';
