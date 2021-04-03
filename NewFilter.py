@@ -27,20 +27,21 @@ def pngize(arraydata, name):
 
 def preprocess(imgpath):
     csimg = cv2.imread(imgpath,0) #read image as grayscale
-    r = 1200.0/csimg.shape[1]
-    dim=(1200,int(csimg.shape[0]*r))
-    rz = cv2.resize(csimg,dim,interpolation=cv2.INTER_AREA)
-    g = 0.2 * (np.log(1 + np.float32(rz)))
-    ret,newg = cv2.threshold(g,0.2,255,cv2.THRESH_TOZERO)
+#    r = 1200.0/csimg.shape[1]
+#    dim=(1200,int(csimg.shape[0]*r))
+#    rz = cv2.resize(csimg,dim,interpolation=cv2.INTER_AREA)
+#    g = 0.2 * (np.log(1 + np.float32(rz)))
+    ret,newg = cv2.threshold(csimg,40,255,cv2.THRESH_TOZERO)
     return (newg)
 
 sample2 = convert(readDCM('sample2.dcm'), 0, 255, np.uint8)
 pngize(sample2,'sample2')
 prep = preprocess('sample2.png')
-plt.imshow(prep)
-plt.show()
-#cv2.imshow('sample image', preprocessed)
-#cv2.waitKey()
+pngize(prep, 'preprocessed')
+#plt.imshow(prep)
+#plt.show()
+cv2.imshow('sample image', prep)
+cv2.waitKey()
 
 
 #path='sample2.png';
