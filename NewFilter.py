@@ -34,14 +34,14 @@ def preprocess(imgpath):
     ret,newg = cv2.threshold(csimg,40,255,cv2.THRESH_TOZERO)
     return (newg)
 
-sample2 = convert(readDCM('sample2.dcm'), 0, 255, np.uint8)
-pngize(sample2,'sample2')
-prep = preprocess('sample2.png')
-pngize(prep, 'preprocessed')
+sample2 = convert(readDCM('Data/sample2.dcm'), 0, 255, np.uint8)
+pngize(sample2,'Data/sample2')
+prep = preprocess('Data/sample2.png')
+pngize(prep, 'Data/preprocessed')
 #plt.imshow(prep)
 #plt.show()
-cv2.imshow('sample image', prep)
-cv2.waitKey()
+#cv2.imshow('sample image', prep)
+#cv2.waitKey()
 
 
 #path='sample2.png';

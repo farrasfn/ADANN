@@ -28,18 +28,15 @@ def pngize(arraydata, name):
 
 def preprocess(imgpath):
     csimg = cv2.imread(imgpath,0) #read image as grayscale
-#    r = 1200.0/csimg.shape[1]
-#    dim=(1200,int(csimg.shape[0]*r))
-#    rz = cv2.resize(csimg,dim,interpolation=cv2.INTER_AREA)
-#    g = 0.2 * (np.log(1 + np.float32(rz)))
     ret,newg = cv2.threshold(csimg,40,255,cv2.THRESH_TOZERO)
     return (newg)
 
-for filename in glob.glob('AD/*.dcm'):
+for filename in glob.glob('AD\*'):
+    #print (filename)
     ph = convert(readDCM(filename), 0, 255, np.uint8)
-    pngize(ph, "filename"[:-4])
-    prep = preprocess(filename[:-3]+'.png')
-    pngize(prep, ("AD PREP"+filename))
+    pngize(ph, "PNG/" + filename[2:-4])
+    prep = preprocess("PNG/" + filename[2:-4] + ".png")
+    pngize(prep, ("PREP/" + filename[2:-4]))
  
 #    new_name = '{} {}'.format(f_name, f_ext)
 #    os.rename(f, new_name)
