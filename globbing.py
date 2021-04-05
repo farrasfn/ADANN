@@ -1,6 +1,6 @@
 import os
   
-os.chdir('D:\College Stuff\Python Projects\S15207')
+os.chdir('./AD')
 print(os.getcwd())
 COUNT = 1
   
