@@ -5,7 +5,7 @@ import cv2
 import os
 import seaborn as sns
 import pandas as pd
-import lightgbm as lgb
+import tensorflow as tf
 from skimage.filters import sobel
 from skimage.feature import greycomatrix, greycoprops
 from skimage.measure import shannon_entropy
@@ -154,115 +154,7 @@ def feature_extractor(dataset):
 ####################################################################
 #Extract features from training images
 image_features = feature_extractor(x_train)
+image_features['labels'] = train_labels
+image_features['target'] = train_labels_encoded
 X_for_ML =image_features
-
-
-#Reshape to a vector for Random Forest / SVM training
-#n_features = image_features.shape[1]
-#image_features = np.expand_dims(image_features, axis=0)
-#X_for_ML = np.reshape(image_features, (x_train.shape[0], -1))  #Reshape to #images, features
-
-#Define the classifier
-# from sklearn.ensemble import RandomForestClassifier
-# RF_model = RandomForestClassifier(n_estimators = 50, random_state = 42)
-
-#Can also use SVM but RF is faster and may be more accurate.
-#from sklearn import svm
-#SVM_model = svm.SVC(decision_function_shape='ovo')  #For multiclass classification
-#SVM_model.fit(X_for_ML, y_train)
-
-# Fit the model on training data
-# RF_model.fit(X_for_ML, y_train) #For sklearn no one hot encoding
-                                
-                                   
- #Class names for LGBM start at 0 so reassigning labels from 1,2,3,4 to 0,1,2,3
-
-
-##########################################
-# Normalize pixel values to between 0 and 1
-x_train, x_test = x_train / 255.0, x_test / 255.0
-
-#One hot encode y values for neural network. 
-from keras.utils import to_categorical
-y_train_one_hot = to_categorical(y_train)
-y_test_one_hot = to_categorical(y_test)
-
-activation = 'sigmoid'
-
-feature_extractor = Sequential()
-feature_extractor.add(Conv2D(32, 3, activation = activation, padding = 'same', input_shape = (SIZE, SIZE, 3)))
-feature_extractor.add(BatchNormalization())
-
-feature_extractor.add(Conv2D(32, 3, activation = activation, padding = 'same', kernel_initializer = 'he_uniform'))
-feature_extractor.add(BatchNormalization())
-feature_extractor.add(MaxPooling2D())
-
-feature_extractor.add(Conv2D(64, 3, activation = activation, padding = 'same', kernel_initializer = 'he_uniform'))
-feature_extractor.add(BatchNormalization())
-
-feature_extractor.add(Conv2D(64, 3, activation = activation, padding = 'same', kernel_initializer = 'he_uniform'))
-feature_extractor.add(BatchNormalization())
-feature_extractor.add(MaxPooling2D())
-
-feature_extractor.add(Flatten())
-
-#Add layers for deep learning prediction
-x = feature_extractor.output  
-x = Dense(128, activation = activation, kernel_initializer = 'he_uniform')(x)
-prediction_layer = Dense(4, activation = 'softmax')(x)
-
-# Make a new model combining both feature extractor and x
-cnn_model = Model(inputs=feature_extractor.input, outputs=prediction_layer)
-cnn_model.compile(optimizer='rmsprop',loss = 'categorical_crossentropy', metrics = ['accuracy'])
-print(cnn_model.summary()) 
-
-
-#Train the CNN model
-history = cnn_model.fit(x_train, y_train_one_hot, epochs=50, validation_data = (x_test, y_test_one_hot))
-
-
-#plot the training and validation accuracy and loss at each epoch
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-epochs = range(1, len(loss) + 1)
-plt.plot(epochs, loss, 'y', label='Training loss')
-plt.plot(epochs, val_loss, 'r', label='Validation loss')
-plt.title('Training and validation loss')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.legend()
-plt.show()
-
-
-acc = history.history['acc']
-val_acc = history.history['val_acc']
-plt.plot(epochs, acc, 'y', label='Training acc')
-plt.plot(epochs, val_acc, 'r', label='Validation acc')
-plt.title('Training and validation accuracy')
-plt.xlabel('Epochs')
-plt.ylabel('Accuracy')
-plt.legend()
-plt.show()
-
-
-prediction_NN = cnn_model.predict(x_test)
-prediction_NN = np.argmax(prediction_NN, axis=-1)
-prediction_NN = le.inverse_transform(prediction_NN)
-
-#Confusion Matrix - verify accuracy of each class
-from sklearn.metrics import confusion_matrix
-cm = confusion_matrix(test_labels, prediction_NN)
-print(cm)
-sns.heatmap(cm, annot=True)
-
-#Check results on a few select images
-
-#n=5 dog park. NN not as good as RF.
-n=9  #Select the index of image to be loaded for testing
-img = x_test[n]
-plt.imshow(img)
-input_img = np.expand_dims(img, axis=0) #Expand dims so the input is (num images, x, y, c)
-prediction = np.argmax(cnn_model.predict(input_img))  #argmax to convert categorical back to original
-prediction = le.inverse_transform([prediction])  #Reverse the label encoder to original name
-print("The prediction for this image is: ", prediction)
-print("The actual label for this image is: ", test_labels[n])
+X_for_ML.to_csv('Data/test.csv')

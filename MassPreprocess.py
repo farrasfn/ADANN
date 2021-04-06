@@ -22,9 +22,9 @@ def convert(img, target_type_min, target_type_max, target_type):
     new_img = (a * img + b).astype(target_type)
     return new_img
 
-def pngize(arraydata, name):
+def jpgize(arraydata, name):
     data = im.fromarray(arraydata)
-    data.save(name + '.png')
+    data.save(name + '.jpg')
 
 def preprocess(imgpath):
     csimg = cv2.imread(imgpath,0) #read image as grayscale
@@ -34,9 +34,9 @@ def preprocess(imgpath):
 for filename in glob.glob('AD\*'):
     #print (filename)
     ph = convert(readDCM(filename), 0, 255, np.uint8)
-    pngize(ph, "PNG/" + filename[2:-4])
-    prep = preprocess("PNG/" + filename[2:-4] + ".png")
-    pngize(prep, ("PREP/" + filename[2:-4]))
+    jpgize(ph, "JPG/" + filename[2:-4])
+    prep = preprocess("JPG/" + filename[2:-4] + ".jpg")
+    jpgize(prep, ("PREP/" + filename[2:-4]))
  
 #    new_name = '{} {}'.format(f_name, f_ext)
 #    os.rename(f, new_name)
