@@ -154,13 +154,13 @@ def feature_extractor(dataset):
 ####################################################################
 #Extract features from training images
 image_features = feature_extractor(x_train)
-image_features['labels'] = train_labels
+#image_features['labels'] = train_labels
 image_features['target'] = train_labels_encoded
 X_for_ML =image_features
 X_for_ML.to_csv('Data/train.csv')
 
 testing_feat = feature_extractor(x_test)
-testing_feat['labels'] = test_labels
+#testing_feat['labels'] = test_labels
 testing_feat['target'] = test_labels_encoded
 testCSV = testing_feat
 testCSV.to_csv('Data/test.csv')
