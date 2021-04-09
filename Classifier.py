@@ -157,10 +157,10 @@ image_features = feature_extractor(x_train)
 #image_features['labels'] = train_labels
 image_features['target'] = train_labels_encoded
 X_for_ML =image_features
-X_for_ML.to_csv('Data/train.csv')
+X_for_ML.to_csv('Data/train.csv', index=False)
 
 testing_feat = feature_extractor(x_test)
 #testing_feat['labels'] = test_labels
 testing_feat['target'] = test_labels_encoded
 testCSV = testing_feat
-testCSV.to_csv('Data/test.csv')
+testCSV.to_csv('Data/test.csv', index=False)
