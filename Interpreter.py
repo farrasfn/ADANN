@@ -39,7 +39,7 @@ port = 465  # For SSL
 smtp_server = "smtp.gmail.com"
 sender_email = "farras.spyderboy@gmail.com"  # Enter your address
 receiver_email = "farrasfn@student.ub.ac.id"  # Enter receiver address
-password = "rl5t1ZIz2LZ11j8"
+password = input("Password : ")
 message = """\
 Subject: Alzheimer Detection Result : {}
 
