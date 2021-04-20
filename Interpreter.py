@@ -4,7 +4,7 @@ import pandas as pd
 from numpy import genfromtxt
 
 # Load the TFLite model and allocate tensors.
-interpreter = tf.lite.Interpreter(model_path="Inference/model.tflite")
+interpreter = tf.lite.Interpreter(model_path="Inference/model2.tflite")
 interpreter.allocate_tensors()
 
 # Get input and output tensors.
@@ -15,7 +15,7 @@ output_details = interpreter.get_output_details()
 input_shape = input_details[0]['shape']
 #print (input_shape)
 
-input_data = genfromtxt('Data/GLCMTest.csv', delimiter=',', skip_header=1)
+input_data = genfromtxt('Data/GLCMTest2.csv', delimiter=',', skip_header=1)
 input_data = np.float32(input_data)
 input_data = np.atleast_2d(input_data)
 #print(input_data)
@@ -29,7 +29,7 @@ output_data = interpreter.get_tensor(output_details[0]['index'])
 if (output_data >= 1):
     output_data = 1
 alzcond = (cat[int(output_data)])
-
+print(alzcond)
 sname= 'Farras Nabil'
 snick= 'Farras'
 #SENDING EMAIL 

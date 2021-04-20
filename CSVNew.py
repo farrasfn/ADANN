@@ -33,8 +33,8 @@ normalize.adapt(x_feat)
 def get_compiled_model():
     model = tf.keras.Sequential([
         normalize, #normalization is so important
-        tf.keras.layers.Dense(26, activation='relu'),
-        tf.keras.layers.Dense(20, activation='relu'),
+        tf.keras.layers.Dense(25, activation='relu'),
+        tf.keras.layers.Dense(13, activation='relu'),
         tf.keras.layers.Dense(1)
     ])
     model.compile(optimizer='adam',
@@ -44,7 +44,7 @@ def get_compiled_model():
     return model
 
 ADModel = get_compiled_model()
-ADModel.fit(x_feat ,x_labels , epochs=20)
+ADModel.fit(x_feat ,x_labels , epochs=1000)
 
 x_test = pd.read_csv('Data/test.csv')
 #print (x_test.head())
@@ -58,4 +58,4 @@ print ('EVALUATE')
 
 result = ADModel.evaluate(xt_feat,xt_labels)
 ADModel.summary()
-ADModel.save('Models/SecondModel')
+ADModel.save('Models/TestSecondModel')

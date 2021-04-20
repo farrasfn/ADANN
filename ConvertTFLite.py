@@ -11,5 +11,5 @@ converter = tf.lite.TFLiteConverter.from_concrete_functions([concrete_func])
 tflite_model = converter.convert()
 
 # Save the TF Lite model.
-with tf.io.gfile.GFile('Inference/model.tflite', 'wb') as f:
+with tf.io.gfile.GFile('Inference/model2.tflite', 'wb') as f:
   f.write(tflite_model)
